@@ -3,11 +3,11 @@ import os
 import cv2
 import numpy as np
 
-camera_ground_height = 1526
-Fx = 1103.709
-Fy = 997.642
-Cx = 956.093
-Cy = 562.057
+camera_ground_height = 1.65     # 相机与地面的高度（米）
+Fx = 721.5377
+Fy = 721.5377
+Cx = 596.5593
+Cy = 149.854
 Vx = 856
 Vy = 559
 
