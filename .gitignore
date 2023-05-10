@@ -9,3 +9,8 @@ open3d/data/DemoICPPointClouds.zip
 open3d/data/depth.png
 open3d/data/init.log
 open3d/data/integrated.ply
+.vscode/launch.json
+open3d/data/fragment_000.ply
+open3d/data/fragment_001.ply
+open3d/data/fragment_003.ply
+open3d/data/fragment_002.ply
