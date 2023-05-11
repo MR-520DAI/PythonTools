@@ -14,3 +14,4 @@ open3d/data/fragment_000.ply
 open3d/data/fragment_001.ply
 open3d/data/fragment_003.ply
 open3d/data/fragment_002.ply
+open3d/data/refined_registration_optimized.json
