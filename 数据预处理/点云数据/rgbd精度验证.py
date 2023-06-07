@@ -21,7 +21,7 @@ for i in range(len(nameList)):
     for y in range(ROIList[i][1], ROIList[i][3], 1):
         for x in range(ROIList[i][0], ROIList[i][2], 1):
             num += 1
-            depth = depthImg[y][x] / 1000
+            depth = depthImg[y][x] / 1250
             depthRGBD += depth
     depthRGBD /= num
     rate = abs(depthRGBD - nameList[i]) / nameList[i]

@@ -92,3 +92,5 @@ open3d/data/colmap/images/27.jpg
 数据预处理/点云数据/data/4.548.png
 数据预处理/点云数据/data/5.097.jpg
 数据预处理/点云数据/data/5.097.png
+open3d/data/result.pcd
+open3d/output.ply
