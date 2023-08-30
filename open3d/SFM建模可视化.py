@@ -273,28 +273,24 @@ if __name__ == "__main__":
                   [0.286006,0.0120754,0.958152,-0.0758167],
                   [0.,0.,0.,1.]])
     T12 = np.matmul(T11, T12)
-    T12 = np.array([[1.,0.,0.,0.],
-                   [0.,1.,0.,0.],
-                   [0.,0.,1.,0.],
-                   [0.,0.,0.,1.]])
     pcd12 = GetPcd(img12, pixels12, plane12, fx, fy, cx, cy, T12)
     pcd12_1 = GetPcd(img12, pixels12_1, plane12_1, fx, fy, cx, cy, T12)
 
     pcd_all = o3d.geometry.PointCloud()
-    # pcd_all += pcd1
-    # pcd_all += pcd2
-    # pcd_all += pcd2_1
-    # pcd_all += pcd3
-    # pcd_all += pcd4
-    # pcd_all += pcd5
-    # pcd_all += pcd6
-    # pcd_all += pcd7
-    # pcd_all += pcd8
-    # pcd_all += pcd9
-    # pcd_all += pcd10
-    # pcd_all += pcd11
-    pcd_all += pcd12
-    pcd_all += pcd12_1
+    pcd_all += pcd1
+    pcd_all += pcd2
+    pcd_all += pcd2_1
+    pcd_all += pcd3
+    pcd_all += pcd4
+    pcd_all += pcd5
+    pcd_all += pcd6
+    pcd_all += pcd7
+    pcd_all += pcd8
+    pcd_all += pcd9
+    pcd_all += pcd10
+    pcd_all += pcd11
+    # pcd_all += pcd12
+    # pcd_all += pcd12_1
     pcd_all.voxel_down_sample(voxel_size=0.1)
     o3d.visualization.draw_geometries([pcd_all])
     o3d.io.write_point_cloud("output.ply", pcd_all)

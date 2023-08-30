@@ -1,4 +1,5 @@
 import cv2
+import time
 import torch
 import numpy as np
 import kornia as K
@@ -31,27 +32,27 @@ def LoFTR(img1path, img2path, matcher):
             kp0.append([mkpts0[i][0], mkpts0[i][1]])
             kp1.append([mkpts1[i][0], mkpts1[i][1]])
     H, mask = cv2.findHomography(np.array(kp0), np.array(kp1), cv2.RANSAC)
-    # img1 = cv2.imread(img1path)   # 特征点可视化
-    # img2 = cv2.imread(img2path)
-    # kp0 = []
-    # num = 0
-    # for i in mkpts0:
-    #     if confidence[num] > 0.95:
-    #         kp0.append(cv2.KeyPoint(i[0], i[1], 1))
-    #         num += 1
-    #     else:
-    #         num += 1
-    #         continue
+    img1 = cv2.imread(img1path)   # 特征点可视化
+    img2 = cv2.imread(img2path)
+    kp0 = []
+    num = 0
+    for i in mkpts0:
+        if confidence[num] > 0.95:
+            kp0.append(cv2.KeyPoint(i[0], i[1], 1))
+            num += 1
+        else:
+            num += 1
+            continue
         
-    # kp1 = []
-    # num = 0
-    # for i in mkpts1:
-    #     if confidence[num] > 0.95:
-    #         kp1.append(cv2.KeyPoint(i[0], i[1], 1))
-    #         num += 1
-    #     else:
-    #         num += 1
-    #         continue
+    kp1 = []
+    num = 0
+    for i in mkpts1:
+        if confidence[num] > 0.95:
+            kp1.append(cv2.KeyPoint(i[0], i[1], 1))
+            num += 1
+        else:
+            num += 1
+            continue
     # matches = [cv2.DMatch(i, i, 0) for i in range(len(kp1))]
     # output_img = cv2.drawMatches(img1, kp0, img2, kp1, matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
     # cv2.imshow('Matches', output_img)
@@ -62,11 +63,14 @@ def LoFTR(img1path, img2path, matcher):
 if __name__ == "__main__":
     root = "data\\img\\"
     matcher = KF.LoFTR(pretrained='indoor')     # 检测器
-    for i in range(1, 10, 1):
+    start_time = time.time()
+    for i in range(1, 38, 1):
         img1_path = root + str(i) + ".jpg"
         img2_path = root + str(i+1) + ".jpg"
         H = LoFTR(img1_path, img2_path, matcher)
-        img1 = cv2.imread(img1_path)
-        img1Reg = cv2.warpPerspective(img1, H, (640, 480))
-        cv2.imwrite(root + str(i+1) + "_reg.jpg", img1Reg)
+        # img1 = cv2.imread(img1_path)
+        # img1Reg = cv2.warpPerspective(img1, H, (640, 480))
+        # cv2.imwrite(root + str(i+1) + "_reg.jpg", img1Reg)
         print(root + str(i+1) + "_reg.jpg")
+    end_time = time.time()
+    print("程序执行时间为：{}秒".format(end_time - start_time))
