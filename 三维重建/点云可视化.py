@@ -312,7 +312,7 @@ if __name__ == "__main__":
                    [0.,0.,1.,0.],
                    [0.,0.,0.,1.]])
     pcd_all = o3d.geometry.PointCloud()
-    for i in range(1, 3, 1):
+    for i in range(0, 38, 1):
         T = np.matmul(T, Ts[i][0])
         img = cv2.imread(root + str(i+1) + ".jpg")
         for vertice, plane in zip(Vertices[i], Planes[i]):

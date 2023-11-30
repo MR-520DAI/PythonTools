@@ -64,37 +64,54 @@ def GetPcd(img, pixels, plane, fx, fy, cx, cy, T):
 
     return pcd
 
-# fx = 518.9676  # 焦距x（单位像素）
-# fy = 518.8752  # 焦距y（单位像素）
-# cx = 320.5550  # 光心x
-# cy = 237.8842  # 光心y
 if __name__ == "__main__":
+    root = "E:\\data\MYData\\CamLidardata\\"
     # 相机参数
     fx = 406.1814  # 焦距x（单位像素）
     fy = 405.7139  # 焦距y（单位像素）
     cx = 311.5565  # 光心x
     cy = 250.0853  # 光心y
 
-    img12 = cv2.imread("E:\\c_project\\Algorithm-3D\\calibration\\camera_calibration\\build\\l1.jpg")
+    Planes = [
+        [[0.20879321132478587, 0.11817739422434466, -0.9707932315375026, 1.6985628794316876]],
+        [[-0.0223137,-0.0543021,0.998275,-1.79477]]
+    ]
+    [0.5437833152069513,0.04477061508915761,-0.838030606915449,1.7050009520395548]
+    Vertices = [
+        [[[2, 2], [620, 2], [620, 369], [2, 369]]],
+        [[[2, 2], [620, 2], [620, 369], [2, 369]]],
+    ]
+    print(Vertices[0])
+    Ts = [
+        [np.array([[1.,0.,0.,0.],
+                [0.,1.,0.,0.],
+                [0.,0.,1.,0.],
+                [0.,0.,0.,1.]])],
+        [np.array([[ 0.975656 , -0.104127 ,  -0.19301,-0.131942],
+ [ 0.0937399 ,  0.993651, -0.0622161 ,0.0439829],
+ [ 0.198262 , 0.0426088 ,  0.979222, -0.122126],
+ [ 0.00000e+00,  0.00000e+00,  0.00000e+00,  1.00000e+00]])],
+    ]
 
-    vertices12 = [[2, 2], [600, 2], [600, 450], [2, 450]]
-    plane12 = [-0.126921,-0.240059,-0.962425,0.607644]
-    pixels12 = get_polygon_pixels(vertices12)
+    [[0.979745,-0.00525998,-0.20018,-0.0507371,],
+    [0.00120885,0.999792,-0.0203543,0.0106038,],
+    [0.200245,0.0197001,0.979548,-0.00214268,],
+    [0.,0.,0.,1.]]
 
-    vertices12_1 = [[2, 2], [307, 2], [296, 341], [2, 411]]
-    plane12_1 = [0.7024207045010664, 0.06515416756188537, -0.7087736509898934, 1.7359047313064564]
-    pixels12_1 = get_polygon_pixels(vertices12_1)
     T = np.array([[1.,0.,0.,0.],
-                  [0.,1.,0.,0.],
-                  [0.,0.,1.,0.],
-                  [0.,0.,0.,1.]])
-
-    pcd12 = GetPcd(img12, pixels12, plane12, fx, fy, cx, cy, T)
-    pcd12_1 = GetPcd(img12, pixels12_1, plane12_1, fx, fy, cx, cy, T)
-
+                   [0.,1.,0.,0.],
+                   [0.,0.,1.,0.],
+                   [0.,0.,0.,1.]])
+    
     pcd_all = o3d.geometry.PointCloud()
-    pcd_all += pcd12
-    # pcd_all += pcd12_1
+    for i in range(0, 2, 1):
+        T = np.matmul(T, Ts[i][0])
+        img = cv2.imread(root + str(i+5) + ".jpg")
+        for vertice, plane in zip(Vertices[i], Planes[i]):
+            pixels = get_polygon_pixels(vertice)
+            pcd = GetPcd(img, pixels, plane, fx, fy, cx, cy, T)
+            pcd_all += pcd
+    
     pcd_all.voxel_down_sample(voxel_size=0.1)
     o3d.visualization.draw_geometries([pcd_all])
     o3d.io.write_point_cloud("output.ply", pcd_all)
