@@ -75,7 +75,7 @@ def main(param):
 
 
 if __name__ == '__main__':
-    param = ['chessboard.docx', 2, 42, 29.7]  # 文档名, 正方格长度cm, 页面宽度cm, 页面高度cm
+    param = ['chessboard.docx', 5, 42, 29.7]  # 文档名, 正方格长度cm, 页面宽度cm, 页面高度cm
     length = len(sys.argv)
     if length > 1:
         for idx in range(1, 5 if (length > 5) else length):
