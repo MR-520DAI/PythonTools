@@ -25,8 +25,9 @@ source_rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(source_color, s
 target_rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(target_color, target_depth, depth_scale=1250)
 
 source_pcd = o3d.geometry.PointCloud.create_from_rgbd_image(source_rgbd, cam.intrinsic, cam.extrinsic)
+source_pcd.estimate_normals(o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=50))
 target_pcd = o3d.geometry.PointCloud.create_from_rgbd_image(target_rgbd, cam.intrinsic, cam.extrinsic)
-target_pcd.estimate_normals(o3d.geometry.KDTreeSearchParamHybrid(radius=0.03, max_nn=30))
+target_pcd.estimate_normals(o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=50))
 
 # source_pcd = o3d.io.read_point_cloud("data\\ICP\\demo\\cloud_bin_0.pcd")
 # target_pcd = o3d.io.read_point_cloud("data\\ICP\\demo\\cloud_bin_1.pcd")

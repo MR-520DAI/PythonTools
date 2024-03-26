@@ -24,6 +24,7 @@ all_pcd = o3d.geometry.PointCloud()
 pcd = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd_image, cam.intrinsic, cam.extrinsic)
 # pcd.transform([[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]])
 all_pcd += pcd
-o3d.io.write_point_cloud("data\\ICP\\office\\16.pcd", all_pcd)
-# o3d.visualization.draw_geometries([all_pcd])
+down_pcd = all_pcd.voxel_down_sample(voxel_size=0.05)
+o3d.io.write_point_cloud("E:\\data\\rgbd\\point\\0.ply", down_pcd)
+o3d.visualization.draw_geometries([down_pcd])
 
