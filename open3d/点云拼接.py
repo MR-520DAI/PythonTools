@@ -15,7 +15,7 @@ intrinsic.intrinsic_matrix = [[fx, 0, cx], [0, fy, cy], [0, 0, 1]]
 cam.intrinsic = intrinsic
 cam.extrinsic = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
-root_dir = "E:\\data\\rgbd\\"
+root_dir = "E:\\data\\rgbd\\vector_model\\"
 
 all_pcd = o3d.geometry.PointCloud()
 
@@ -31,15 +31,17 @@ T_l_i = np.array([[1.,0.,0.,-0.011],
 T_i_l = np.linalg.inv(T_l_i)
 T_i_c = np.matmul(T_i_l, T_l_c)
 
-for i in range(500):
+pcd_points = o3d.geometry.PointCloud()
+for i in range(0, 1, 1):
     color_raw = o3d.io.read_image(root_dir + "color\\" + str(i) + ".jpg")
     depth_raw = o3d.io.read_image(root_dir + "depth\\" + str(i) + ".png")
     rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(color_raw, depth_raw, depth_scale=1000, depth_trunc=5)
     print(root_dir + "color\\" + str(i) + ".jpg")
 
     pcd = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd_image, cam.intrinsic, cam.extrinsic)
-    pcd = pcd.voxel_down_sample(voxel_size=0.01)
-    o3d.io.write_point_cloud(root_dir + "point\\" + str(i) + "_org.ply", pcd)
+    pcd = pcd.voxel_down_sample(voxel_size=0.02)
+    pcd_points.points = pcd.points
+    o3d.io.write_point_cloud(root_dir + "point\\" + str(i) + "_org.pcd", pcd_points)
 
     with open(root_dir + "odom\\" + str(i) + ".txt", "r") as f:
         pose_data = f.readline()
@@ -51,12 +53,14 @@ for i in range(500):
         T_w_i[:3, :3] = rotation_matrix  # 将旋转矩阵部分填入变换矩阵的旋转部分
         T_w_i[:3, 3] = t  # 将平移向量填入变换矩阵的平移部分
         T_w_c = np.matmul(T_w_i, T_i_c)
+    print(i,"--T_w_c:",T_w_c)
     pcd.transform(T_w_c)
-    o3d.io.write_point_cloud(root_dir + "point\\" + str(i) + "_transform.ply", pcd)
+    pcd_points.points = pcd.points
+    o3d.io.write_point_cloud(root_dir + "point\\" + str(i) + "_transform.pcd", pcd_points)
     
     all_pcd += pcd
     # all_pcd.voxel_down_sample(voxel_size=0.5)
 
 all_pcd = all_pcd.voxel_down_sample(voxel_size=0.02)
-o3d.io.write_point_cloud("E:\\data\\rgbd\\point\\x.ply", all_pcd)
+o3d.io.write_point_cloud("x.ply", all_pcd)
 o3d.visualization.draw_geometries([all_pcd])
